@@ -1,0 +1,39 @@
+{
+  "name": "koa-gcs",
+  "version": "0.0.1",
+  "description": "koa GCS middleware",
+  "main": "src/index.js",
+  "dependencies": {
+    "@google-cloud/storage": "^3.0.3",
+    "@koa/cors": "^3.0.0",
+    "@koa/router": "^8.0.0",
+    "koa": "^2.7.0",
+    "koa-multer": "^1.0.2",
+    "lodash": "^4.17.15",
+    "path": "^0.12.7"
+  },
+  "scripts": {
+    "demo": "node example.js",
+    "release": "rm -rf package-lock.json && npm version minor && npm publish",
+    "patch": "rm -rf package-lock.json && npm version patch && npm publish"
+  },
+  "keywords": [
+    "GCS",
+    "koa",
+    "multer",
+    "memoryStorage"
+  ],
+  "engines": {
+    "node": ">= 10.16.0"
+  },
+  "author": "alincode <alincode@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alincode/koa-gcs.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alincode/koa-gcs/issues"
+  },
+  "homepage": "https://github.com/alincode/koa-gcs#readme",
+  "license": "MIT"
+}
