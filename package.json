@@ -29,7 +29,7 @@
   "author": "alincode <alincode@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alincode/koa-gcs.js.git"
+    "url": "git+https://github.com/alincode/koa-gcs.git"
   },
   "bugs": {
     "url": "https://github.com/alincode/koa-gcs/issues"
