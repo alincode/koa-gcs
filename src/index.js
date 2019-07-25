@@ -70,8 +70,8 @@ class KoaGCS {
       writeStream.on('finish', async () => {
         file.cloudStorageObject = gcsFileName
         await gcsfile.makePublic()
-        file.cloudStoragePublicUrl = this._getPublicUrl(gcsFileName)
-        console.log(`[file completed] ${file.cloudStoragePublicUrl}`)
+        file.thumbnailUrl = this._getPublicUrl(gcsFileName)
+        console.log(`[file completed] ${file.thumbnailUrl}`)
         resolve(file)
       })
     })
@@ -108,23 +108,16 @@ class KoaGCS {
 
   async sendUploadToGCS(file, filePath = '') {
     console.log(`[uploading] ${file.originalname} file`)
-    const readstream = new stream.PassThrough()
-    readstream.end(file.buffer)
-    let thumbnailInfo
+    let info
     const prefixName = filePath + Date.now()
+
     if (this.config.image.thumbnail) {
-      thumbnailInfo = await this._uploadThumbnail(readstream, file, prefixName)
+      const readstream = new stream.PassThrough().end(file.buffer)
+      info = await this._uploadThumbnail(readstream, file, prefixName)
     }
-
-    const originFileInfo = await this._uploadOriginFile(
-      readstream,
-      file,
-      prefixName
-    )
-
-    let result = _.clone(originFileInfo)
-    if (thumbnailInfo) result.thumbnailUrl = thumbnailInfo.cloudStoragePublicUrl
-    return result
+    const readstream2 = new stream.PassThrough().end(file.buffer)
+    info = await this._uploadOriginFile(readstream2, file, prefixName)
+    return info
   }
 }
 
