@@ -8,11 +8,14 @@ const router = new Router()
 
 const config = {
   gcs: {
-    bucket: 'demo',
+    bucket: 'your-bucket-name',
   },
   maxFileSizeLimit: 5 * 1024 * 1024, // 5mb
   storageOption: {
-    projectId: 'demo-project',
+    projectId: 'your-gcp-project-id',
+  },
+  image: {
+    thumbnail: true,
   },
 }
 const koaGCS = new KoaGCS(config)

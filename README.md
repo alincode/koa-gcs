@@ -6,6 +6,9 @@ Koa GCS middleware
 [![Dependency Status](https://img.shields.io/david/alincode/koa-gcs.svg?style=flat)](https://david-dm.org/alincode/koa-gcs)
 [![NPM version][npm-image]][npm-url] 
 
+### Maintainers
+- [alincode](https://github.com/alincode) - **AILIN LIOU** (author)
+
 ## Installation and Usage
 
 ```
@@ -29,12 +32,13 @@ const config = {
   storageOption: {
     projectId: 'your-gcp-project-id',
   },
+  image: {
+    thumbnail: true,
+  },
 }
-const koaGCS = new KoaGCS(config)
 
 router.post('/upload', koaGCS.multer.single('file'), async ctx => {
-  const file = await koaGCS.sendUploadToGCS(ctx.req.file)
-  // const file = await koaGCS.sendUploadToGCS(ctx.req.file, 'users/')
+  const file = await koaGCS.sendUploadToGCS(ctx.req.file, 'users/')
   const { cloudStoragePublicUrl, mimetype } = file
   const { width, height } = ctx.req.body
 
@@ -69,11 +73,18 @@ const defaultConfig = {
     keyFilename: path.join(__dirname, './firebase-serviceAccountKey.json'),
     projectId: 'your-gcp-project-id',
   },
+  image: {
+    resize: '200x',
+    quality: 90,
+    thumbnail: false,
+  },
 }
 ```
 
-### Maintainers
-- [alincode](https://github.com/alincode) - **AILIN LIOU** (author)
+### related projects
+* [imagemagick-stream](https://github.com/eivindfjeldstad/imagemagick-stream)
+* [koa-multer](https://github.com/koa-modules/multer)
+* [stream](https://github.com/juliangruber/stream)
 
 ### License
 MIT © [alincode](https://github.com/alincode)
