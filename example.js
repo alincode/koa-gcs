@@ -22,10 +22,20 @@ const koaGCS = new KoaGCS(config)
 
 router.post('/v5/medias', koaGCS.multer.single('file'), async ctx => {
   const file = await koaGCS.sendUploadToGCS(ctx.req.file, 'users/')
-  const { cloudStoragePublicUrl, mimetype } = file
+  const {
+    cloudStoragePublicUrl,
+    mimetype,
+    fieldname,
+    originalname,
+    encoding,
+    size,
+    cloudStorageObject,
+    thumbnailUrl,
+  } = file
   const { width, height } = ctx.req.body
 
   ctx.body = {
+    thumbnail: thumbnailUrl,
     url: cloudStoragePublicUrl,
     width,
     height,
