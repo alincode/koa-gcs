@@ -45,21 +45,15 @@ class KoaGCS {
     }/${filename}`
   }
 
-  _getGcsFileName(file, prefixName, isThumbnail = false) {
-    if (isThumbnail) {
-      return `${prefixName}_${this.config.image.resize}${path.extname(
-        file.originalname
-      )}`
-    } else {
-      return `${prefixName}${path.extname(file.originalname)}`
-    }
+  _getGcsFileName(isThumbnail, fileName, prefixName) {
+    const subPath = isThumbnail ? this.config.image.resize : 'origin'
+    return `${prefixName}/${subPath}/${fileName}`
   }
 
-  _uploadThumbnail(readstream, file, prefixName) {
+  _uploadThumbnail(readstream, file, gcsFileName) {
     const resize = im()
       .resize(this.config.image.resize)
       .quality(this.config.image.quality)
-    const gcsFileName = this._getGcsFileName(file, prefixName, true)
     const gcsfile = this._bucket.file(gcsFileName)
     const option = this._getWriteStreamOptions(file)
     const writeStream = gcsfile.createWriteStream(option)
@@ -80,8 +74,7 @@ class KoaGCS {
     })
   }
 
-  _uploadOriginFile(readstream, file, prefixName) {
-    const gcsFileName = this._getGcsFileName(file, prefixName, false)
+  _uploadOriginFile(readstream, file, gcsFileName) {
     const gcsfile = this._bucket.file(gcsFileName)
     const option = this._getWriteStreamOptions(file)
     const writeStream = gcsfile.createWriteStream(option)
@@ -112,17 +105,19 @@ class KoaGCS {
     }
   }
 
-  async sendUploadToGCS(file, filePath = '') {
+  async sendUploadToGCS(file, prefixName = '') {
     console.log(`[uploading] ${file.originalname} file`)
     let info
-    const prefixName = filePath + Date.now()
+    const fileName = Date.now() + path.extname(file.originalname)
 
     if (this.config.image.thumbnail) {
       const readstream = new stream.PassThrough().end(file.buffer)
-      info = await this._uploadThumbnail(readstream, file, prefixName)
+      const gcsFileName = this._getGcsFileName(true, fileName, prefixName)
+      info = await this._uploadThumbnail(readstream, file, gcsFileName)
     }
     const readstream2 = new stream.PassThrough().end(file.buffer)
-    info = await this._uploadOriginFile(readstream2, file, prefixName)
+    const gcsFileName = this._getGcsFileName(false, fileName, prefixName)
+    info = await this._uploadOriginFile(readstream2, file, gcsFileName)
     return info
   }
 }
