@@ -9,13 +9,13 @@ const defaultConfig = {
   gcs: {
     bucket: 'your-bucket-name',
   },
-  maxFileSizeLimit: 10 * 1024 * 1024, // 10mb
+  maxFileSizeLimit: 5 * 1024 * 1024, // 5mb
   storageOption: {
     keyFilename: path.join(__dirname, '../firebase-serviceAccountKey.json'),
     projectId: 'your-gcp-project-id',
   },
   image: {
-    resize: '200x',
+    resize: '800x',
     quality: 90,
     thumbnail: false,
   },
