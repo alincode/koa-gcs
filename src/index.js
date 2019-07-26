@@ -51,35 +51,19 @@ class KoaGCS {
     return `${prefixName}/${subPath}/${fileName}`
   }
 
-  _uploadThumbnail(readstream, file, gcsFileName) {
-    const resize = im()
-      .resize(this.config.image.resize)
-      .quality(this.config.image.quality)
+  _uploadFile(isThumbnail, file, gcsFileName) {
+    const readstream = new stream.PassThrough().end(file.buffer)
     const gcsfile = this._bucket.file(gcsFileName)
     const option = this._getWriteStreamOptions(file)
     const writeStream = gcsfile.createWriteStream(option)
-    readstream.pipe(resize).pipe(writeStream)
-    return new Promise((resolve, reject) => {
-      writeStream.on('error', async err => {
-        console.error(err)
-        reject(err)
-      })
-
-      writeStream.on('finish', async () => {
-        file.cloudStorageObject = gcsFileName
-        await gcsfile.makePublic()
-        file.thumbnailUrl = this._getPublicUrl(gcsFileName)
-        console.log(`[file completed] ${file.thumbnailUrl}`)
-        resolve(file)
-      })
-    })
-  }
-
-  _uploadOriginFile(readstream, file, gcsFileName) {
-    const gcsfile = this._bucket.file(gcsFileName)
-    const option = this._getWriteStreamOptions(file)
-    const writeStream = gcsfile.createWriteStream(option)
-    readstream.pipe(writeStream)
+    if (isThumbnail) {
+      const resize = im()
+        .resize(this.config.image.resize)
+        .quality(this.config.image.quality)
+      readstream.pipe(resize).pipe(writeStream)
+    } else {
+      readstream.pipe(writeStream)
+    }
 
     return new Promise((resolve, reject) => {
       writeStream.on('error', async err => {
@@ -90,7 +74,13 @@ class KoaGCS {
       writeStream.on('finish', async () => {
         file.cloudStorageObject = gcsFileName
         await gcsfile.makePublic()
-        file.cloudStoragePublicUrl = this._getPublicUrl(gcsFileName)
+        const publicUrl = this._getPublicUrl(gcsFileName)
+        if (isThumbnail) {
+          file.thumbnailUrl = publicUrl
+        } else {
+          file.cloudStoragePublicUrl = publicUrl
+        }
+
         console.log(`[file completed] ${file.cloudStoragePublicUrl}`)
         resolve(file)
       })
@@ -112,13 +102,11 @@ class KoaGCS {
     const fileName = shortid.generate() + path.extname(file.originalname)
 
     if (this.config.image.thumbnail) {
-      const readstream = new stream.PassThrough().end(file.buffer)
       const gcsFileName = this._getGcsFileName(true, fileName, prefixName)
-      info = await this._uploadThumbnail(readstream, file, gcsFileName)
+      info = await this._uploadFile(true, file, gcsFileName)
     }
-    const readstream2 = new stream.PassThrough().end(file.buffer)
-    const gcsFileName = this._getGcsFileName(false, fileName, prefixName)
-    info = await this._uploadOriginFile(readstream2, file, gcsFileName)
+    const gcsOriginFileName = this._getGcsFileName(false, fileName, prefixName)
+    info = await this._uploadFile(false, file, gcsOriginFileName)
     return info
   }
 }
