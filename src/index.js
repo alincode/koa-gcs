@@ -65,7 +65,10 @@ class KoaGCS {
     const writeStream = gcsfile.createWriteStream(option)
     readstream.pipe(resize).pipe(writeStream)
     return new Promise((resolve, reject) => {
-      writeStream.on('error', async err => reject(err))
+      writeStream.on('error', async err => {
+        console.error(err)
+        reject(err)
+      })
 
       writeStream.on('finish', async () => {
         file.cloudStorageObject = gcsFileName
@@ -85,7 +88,10 @@ class KoaGCS {
     readstream.pipe(writeStream)
 
     return new Promise((resolve, reject) => {
-      writeStream.on('error', async err => reject(err))
+      writeStream.on('error', async err => {
+        console.error(err)
+        reject(err)
+      })
 
       writeStream.on('finish', async () => {
         file.cloudStorageObject = gcsFileName
