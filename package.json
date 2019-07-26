@@ -11,7 +11,8 @@
     "koa": "^2.7.0",
     "koa-multer": "^1.0.2",
     "lodash": "^4.17.15",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "shortid": "^2.2.14"
   },
   "scripts": {
     "demo": "node example.js",

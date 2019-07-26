@@ -1,4 +1,5 @@
 const { Storage } = require('@google-cloud/storage')
+const shortid = require('shortid')
 const path = require('path')
 const stream = require('stream')
 const Multer = require('koa-multer')
@@ -108,7 +109,7 @@ class KoaGCS {
   async sendUploadToGCS(file, prefixName = '') {
     console.log(`[uploading] ${file.originalname} file`)
     let info
-    const fileName = Date.now() + path.extname(file.originalname)
+    const fileName = shortid.generate() + path.extname(file.originalname)
 
     if (this.config.image.thumbnail) {
       const readstream = new stream.PassThrough().end(file.buffer)
