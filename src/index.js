@@ -96,12 +96,17 @@ class KoaGCS {
     }
   }
 
+  _isMakeThumbnail(extname) {
+    return this.config.image.thumbnail && _.startsWith(extname, 'image')
+  }
+
   async sendUploadToGCS(file, prefixName = '') {
     console.log(`[uploading] ${file.originalname} file`)
+    const extname = path.extname(file.originalname)
+    const fileName = shortid.generate() + extname
     let info
-    const fileName = shortid.generate() + path.extname(file.originalname)
 
-    if (this.config.image.thumbnail) {
+    if (this._isMakeThumbnail(extname)) {
       const gcsFileName = this._getGcsFileName(true, fileName, prefixName)
       info = await this._uploadFile(true, file, gcsFileName)
     }
