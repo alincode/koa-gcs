@@ -4,7 +4,7 @@
   "description": "koa GCS middleware",
   "main": "src/index.js",
   "dependencies": {
-    "@google-cloud/storage": "^3.0.3",
+    "@google-cloud/storage": "^4.0.0",
     "@koa/cors": "^3.0.0",
     "@koa/router": "^8.0.0",
     "imagemagick-stream": "^4.1.1",
