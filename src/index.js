@@ -41,9 +41,7 @@ class KoaGCS {
   }
 
   _getPublicUrl(filename) {
-    return `https://storage.googleapis.com/${
-      this.config.gcs.bucket
-    }/${filename}`
+    return `https://storage.googleapis.com/${this.config.gcs.bucket}/${filename}`
   }
 
   _getGcsFileName(isThumbnail, fileName, prefixName) {
@@ -81,7 +79,7 @@ class KoaGCS {
           file.cloudStoragePublicUrl = publicUrl
         }
 
-        console.log(`[file completed] ${file.cloudStoragePublicUrl}`)
+        console.log(`[file completed] ${publicUrl}`)
         resolve(file)
       })
     })
@@ -96,8 +94,8 @@ class KoaGCS {
     }
   }
 
-  _isMakeThumbnail(extname) {
-    return this.config.image.thumbnail && _.startsWith(extname, 'image')
+  _isMakeThumbnail(mimetype) {
+    return this.config.image.thumbnail && _.startsWith(mimetype, 'image')
   }
 
   async sendUploadToGCS(file, prefixName = '') {
@@ -106,7 +104,7 @@ class KoaGCS {
     const fileName = shortid.generate() + extname
     let info
 
-    if (this._isMakeThumbnail(extname)) {
+    if (this._isMakeThumbnail(file.mimetype)) {
       const gcsFileName = this._getGcsFileName(true, fileName, prefixName)
       info = await this._uploadFile(true, file, gcsFileName)
     }
