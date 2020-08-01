@@ -10,7 +10,7 @@
     "imagemagick-stream": "^4.1.1",
     "koa": "^2.11.0",
     "koa-multer": "^1.0.2",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "path": "^0.12.7",
     "shortid": "^2.2.15"
   },
