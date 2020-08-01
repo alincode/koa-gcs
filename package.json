@@ -4,9 +4,9 @@
   "description": "koa GCS middleware",
   "main": "src/index.js",
   "dependencies": {
-    "@google-cloud/storage": "^4.3.0",
+    "@google-cloud/storage": "^5.1.2",
     "@koa/cors": "^3.0.0",
-    "@koa/router": "^8.0.6",
+    "@koa/router": "^9.3.1",
     "imagemagick-stream": "^4.1.1",
     "koa": "^2.11.0",
     "koa-multer": "^1.0.2",
@@ -16,7 +16,7 @@
   },
   "scripts": {
     "demo": "node example.js",
-    "start-doc": "node doc.js",
+    "doc": "node doc.js",
     "prestart": "gulp",
     "open-doc": "open http://localhost:3001/docs/node-docs#/",
     "release": "rm -rf package-lock.json && npm version minor && npm publish",
