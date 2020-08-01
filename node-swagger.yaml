@@ -1,0 +1,85 @@
+openapi: 3.0.0
+
+info:
+  title: API V1
+  version: 5.0.20200724
+
+servers:
+  - url: http://localhost:3000/v1
+    description: local server
+
+security:
+  - jwtAuth: []
+
+paths:
+  /attachments:
+    post:
+      summary: 上傳檔案
+      description: 上傳檔案
+      tags:
+        - attachments
+      requestBody:
+        description: 上傳檔案參數
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                width:
+                  type: integer
+                height:
+                  type: integer
+                file:
+                  type: string
+                  format: binary
+                  description: maxFileSizeLimit is 5mb
+              required:
+                - file
+                - width
+                - height
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttachmentResponse'
+
+components:
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Attachment:
+      properties:
+        id:
+          type: string
+        thumbnail:
+          type: string
+        url:
+          type: string
+        width:
+          type: integer
+          format: int32
+          example: 200
+        height:
+          type: integer
+          format: int32
+          example: 200
+        mimeType:
+          type: string
+          example: 'image/png'
+          description: 'mime type. eg. image/png. Ref: https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Basics_of_HTTP/MIME_types'
+      required:
+        - id
+        - thumbnail
+        - url
+        - width
+        - height
+        - mimeType
+
+    AttachmentResponse:
+      $ref: '#/components/schemas/Attachment'

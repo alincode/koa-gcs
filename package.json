@@ -16,6 +16,9 @@
   },
   "scripts": {
     "demo": "node example.js",
+    "start-doc": "node doc.js",
+    "prestart": "gulp",
+    "open-doc": "open http://localhost:3001/docs/node-docs#/",
     "release": "rm -rf package-lock.json && npm version minor && npm publish",
     "patch": "rm -rf package-lock.json && npm version patch && npm publish"
   },
@@ -37,5 +40,11 @@
     "url": "https://github.com/alincode/koa-gcs/issues"
   },
   "homepage": "https://github.com/alincode/koa-gcs#readme",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-yaml": "^2.0.4",
+    "koa-static": "^5.0.0",
+    "koa2-swagger-ui": "^4.0.1"
+  }
 }
