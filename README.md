@@ -4,9 +4,10 @@ Koa GCS middleware
 
 ![npm downloads](https://img.shields.io/npm/dt/koa-gcs.svg)
 [![Dependency Status](https://img.shields.io/david/alincode/koa-gcs.svg?style=flat)](https://david-dm.org/alincode/koa-gcs)
-[![NPM version][npm-image]][npm-url] 
+[![NPM version][npm-image]][npm-url]
 
 ### Maintainers
+
 - [alincode](https://github.com/alincode) - **AILIN LIOU** (author)
 
 ## Installation and Usage
@@ -37,9 +38,9 @@ const config = {
   },
 }
 
-router.post('/upload', koaGCS.multer.single('file'), async ctx => {
+router.post('/upload', koaGCS.multer.single('file'), async (ctx) => {
   const file = await koaGCS.sendUploadToGCS(ctx.req.file, 'users')
-    const {
+  const {
     cloudStoragePublicUrl,
     mimetype,
     fieldname,
@@ -91,12 +92,28 @@ const defaultConfig = {
 }
 ```
 
+### kill server when seeing “EADDRINUSE: address already in use”
+
+```
+Error: listen EADDRINUSE: address already in use :::3000
+    at Server.setupListenHandle [as _listen2] (net.js:1228:14)
+    at listenInCluster (net.js:1276:12)
+    at Server.listen (net.js:1364:7)
+```
+
+```
+lsof -i tcp:3000
+kill -9 ?????
+```
+
 ### related projects
-* [imagemagick-stream](https://github.com/eivindfjeldstad/imagemagick-stream)
-* [koa-multer](https://github.com/koa-modules/multer)
-* [stream](https://github.com/juliangruber/stream)
+
+- [imagemagick-stream](https://github.com/eivindfjeldstad/imagemagick-stream)
+- [koa-multer](https://github.com/koa-modules/multer)
+- [stream](https://github.com/juliangruber/stream)
 
 ### License
+
 MIT © [alincode](https://github.com/alincode)
 
 [npm-url]: https://npmjs.org/package/koa-gcs

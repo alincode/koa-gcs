@@ -20,32 +20,28 @@ const config = {
 }
 const koaGCS = new KoaGCS(config)
 
-router.post(
-  '/v5/messages/attachments',
-  koaGCS.multer.single('file'),
-  async ctx => {
-    const file = await koaGCS.sendUploadToGCS(ctx.req.file, 'users')
-    const {
-      cloudStoragePublicUrl,
-      mimetype,
-      fieldname,
-      originalname,
-      encoding,
-      size,
-      cloudStorageObject,
-      thumbnailUrl,
-    } = file
-    const { width, height } = ctx.req.body
+router.post('/v1/attachments', koaGCS.multer.single('file'), async (ctx) => {
+  const file = await koaGCS.sendUploadToGCS(ctx.req.file, 'users')
+  const {
+    cloudStoragePublicUrl,
+    mimetype,
+    fieldname,
+    originalname,
+    encoding,
+    size,
+    cloudStorageObject,
+    thumbnailUrl,
+  } = file
+  const { width, height } = ctx.req.body
 
-    ctx.body = {
-      thumbnail: thumbnailUrl,
-      url: cloudStoragePublicUrl,
-      width,
-      height,
-      mimeType: mimetype,
-    }
+  ctx.body = {
+    thumbnail: thumbnailUrl,
+    url: cloudStoragePublicUrl,
+    width,
+    height,
+    mimeType: mimetype,
   }
-)
+})
 app.use(cors())
 app.use(router.routes())
 app.use(router.allowedMethods())
